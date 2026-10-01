@@ -1,0 +1,96 @@
+MySWITCH
+
+MySWITCH to prosta aplikacja Android, która zamienia naciśnięcia przycisków
+Zwift CLICK na komendy sterowania jazdą w MyWhoosh.
+
+Projekt zawiera również samodzielną wersję dla Windows 10/11. Jej kod,
+instrukcja i konfiguracja instalatora znajdują się w katalogu
+[`windows`](windows/README.md).
+
+## Co robi
+
+- automatycznie wyszukuje i łączy Zwift CLICK przez Bluetooth LE,
+- przekazuje `bieg +` i `bieg −` do MyWhoosh przez otwarty protokół
+  OpenBikeControl,
+- steruje położeniem zawodnika przyciskami `Z` / `A` prawego CLICK V2,
+- przyciskiem `Y` wybiera kierunek na rozjeździe,
+- pozwala skonfigurować osobno każdy przycisk prawej manetki przez kliknięcie
+  jego chmurki; lista zawiera tylko sprawdzone funkcje,
+- działa jako usługa pierwszoplanowa po przejściu do MyWhoosh,
+- automatycznie ponawia skanowanie i połączenie po utracie sygnału,
+- uruchamia aplikację MyWhoosh po jednym dotknięciu,
+- nie używa usługi dostępności ani stałych współrzędnych ekranu,
+- nie wymaga konta, chmury ani połączenia z zewnętrznym serwerem.
+
+## Obsługiwane kontrolery
+
+- Zwift CLICK V1 (`BC1`) — dwa przyciski `+` / `−`.
+- Zwift CLICK V2 — stabilny tryb prawej manetki:
+  - prawa manetka: `+` zwiększa bieg, `B` zmniejsza bieg,
+  - prawa manetka: `Z` przesuwa zawodnika w lewo, a `A` w prawo,
+  - prawa manetka: `Y` wybiera kierunek na rozjeździe,
+  - każdemu z tych przycisków można przypisać inną sprawdzoną funkcję.
+
+Tryb Windows używa prawej manetki `0x0A` bez codziennego odblokowania w Zwift.
+Lewa strona nie jest łączona, ponieważ jej firmware wymaga odblokowania przez
+Zwift albo krótkiego restartu mniej więcej co minutę. Wszystkie wymagane akcje
+są dlatego przypisane do prawej manetki.
+
+## Pierwsze uruchomienie
+
+1. Zainstaluj i uruchom MySWITCH.
+2. Nadaj uprawnienia Bluetooth i powiadomień.
+3. Naciśnij dowolny przycisk Zwift CLICK, aby obudzić kontroler.
+4. Dotknij **Połącz i uruchom MyWhoosh**.
+5. W MyWhoosh otwórz ekran urządzeń, wybierz ikonę **OpenBikeControl**
+   i potwierdź połączenie.
+
+Przy kolejnych uruchomieniach MySWITCH automatycznie uruchamia most oraz
+MyWhoosh. Przyciski **Test −** i **Test +** pozwalają sprawdzić samo połączenie
+MyWhoosh bez kontrolera.
+
+Indywidualne mapowanie przycisków jest zapisywane lokalnie. W razie potrzeby
+można jednym kliknięciem przywrócić cały układ domyślny.
+
+W wersji Windows poziom baterii połączonej manetki jest pokazany przy jej
+statusie. Diagnostyka pozostaje całkowicie ukryta; można ją otworzyć trzema
+szybkimi kliknięciami kafelka „Most aktywny”.
+
+## Kompilacja
+
+Wymagania:
+
+- JDK 17 lub nowszy,
+- Android SDK 35,
+- urządzenie z Androidem 10 lub nowszym.
+
+```powershell
+.\gradlew.bat testDebugUnitTest assembleDebug
+```
+
+APK zostanie zapisany w:
+
+```text
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+### Windows
+
+```powershell
+cd windows
+npm install
+npm test
+npm run build:portable
+```
+
+Pliki wykonywalne zostaną zapisane w `windows/release`.
+
+## Architektura
+
+Opis przepływu danych i decyzji projektowych znajduje się w
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## Ważne
+
+MySWITCH jest niezależnym projektem i nie jest produktem ani oficjalnym
+rozszerzeniem Zwift lub MyWhoosh. Nazwy produktów należą do ich właścicieli.
